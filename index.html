@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plot</title>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+    * {box-sizing: border-box;}
+    body, html {
+        background: linear-gradient(356deg, rgba(65,81,250,1) 0%, rgba(201,133,213,1) 100%);        color: white;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
+    header {
+        font-size:80px;
+        font-family: 'Roboto', sans-serif;
+        text-align: center;
+        padding: 10px;
+    }
+    .container {
+        display: flex;
+        padding: 20px 40px;
+        height: 80vh;
+    }
+
+    .container > div {
+        box-shadow: 0px 10px 20px 8px #00000022;
+        height: 100%;
+    } 
+
+    #chartContainer {
+        flex: 3;
+        width: 80%;
+        border-radius: 10px;
+        background-color: white;
+    }
+    .dataContainer {
+        flex: 1;
+        padding: 20px;
+        height: 80%;
+        background-color: white;
+        border-radius: 10px;
+        margin-left: 20px;
+    }
+    .dataContainer button {
+        width: 100%;
+        height: 50px;
+    }
+    .data {
+        display: flex;
+        height: 80%;
+    }
+    .series {
+        color: black;
+        font-family: 'Roboto', sans-serif;
+        font-size: 30px;
+        height: 80%;
+        width: 80%;
+        margin: 30px auto;
+        display: block;
+    }
+    .series textarea {
+        font-family: inherit;
+        font-size: 25px;
+        width: 80%;
+        height: 80%;
+        resize: none;
+    }
+    canvas {
+        border-radius: 10px;
+        height: 100%;
+    }
+</style>
+<body>
+    <header>Plot Chart</header>
+    <div class="container">
+        <div id="chartContainer"></div>
+        <div class="dataContainer">
+            <div class="data">
+                <div class="series">
+                    <h3>Series 1</h3>
+                    <textarea id="data1" value="23,23
+                        23,11
+                        33,44"
+                    >
+                    </textarea>
+                </div>
+                <div class="series">
+                    <h3>Series 2</h3>
+                    <textarea id=data2 value="2,3
+                        22,33
+                        44,55
+                        51,2"
+                    ></textarea>
+                </div>
+            </div>
+            <button id="btn"> Update </button>
+        </div>
+    </div>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script>
+        let chart;
+        window.onload = function () {
+        chart = new CanvasJS.Chart("chartContainer", {
+            animationEnabled: true,
+            title: {
+                text: "Data Plot",
+                fontFamily: "'Roboto', sans-serif"
+            },
+            axisX: {
+                title: "X Value",
+                titleFontFamily: "'Roboto', sans-serif"
+            },
+            axisY: {
+                title: "Y Value",
+                titleFontFamily: "'Roboto', sans-serif"
+            },
+            legend: {
+                cursor: "pointer",
+                fontFamily: "'Roboto', sans-serif",
+                itemclick: toggleDataSeries
+            },
+            data: [{
+                type: "scatter",
+                name: "Data Series 1",
+                labelFontFamily: "'Roboto', sans-serif",
+                showInLegend: true,
+                toolTipContent: "<span style=\"color:#4F81BC \">{name}</span><br>X: {x}<br>Y: {y}%",
+                dataPoints: [
+                    { x: 100, y: 10, markerSize: 20},
+                    { x: 110, y: 15, markerSize: 20 },
+                    { x: 130, y: 17, markerSize: 20 },
+                    { x: 140, y: 19, markerSize: 20 },
+                    { x: 145, y: 21, markerSize: 20 },
+                    { x: 400, y: 25, markerSize: 20 },
+                    { x: 430, y: 27, markerSize: 20 },
+                ]
+            },
+            {
+                type: "scatter",
+                name: "Data Series 2",
+                fontFamily: "'Roboto', sans-serif",
+                showInLegend: true,
+                markerType: "triangle",
+                toolTipContent: "<span style=\"color:#C0504E \">{name}</span><br>X: {x}<br>Y: {y}",
+                dataPoints: [
+                    { x: 100, y: 25, markerSize: 15 },
+                    { x: 110, y: 35, markerSize: 15 },
+                    { x: 130, y: 35, markerSize: 15 },
+                    { x: 140, y: 40, markerSize: 15 },
+                    { x: 145, y: 45, markerSize: 15 },
+                    { x: 400, y: 42, markerSize: 15 },
+                    { x: 430, y: 32, markerSize: 15 },
+                    { x: 444, y: 35, markerSize: 15 },
+                    { x: 460, y: 43, markerSize: 15 },
+                    { x: 490, y: 50, markerSize: 15 },
+                    { x: 500, y: 57, markerSize: 15 },
+                    { x: 510, y: 67, markerSize: 15 },
+                    { x: 600, y: 40, markerSize: 15 },
+                    { x: 700, y: 46, markerSize: 15 },
+                    { x: 800, y: 50, markerSize: 15 },
+                    { x: 900, y: 60, markerSize: 15 },
+                ]
+            }]
+        });
+        chart.render();
+
+        function toggleDataSeries(e) {
+            if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+            } else {
+                e.dataSeries.visible = true;
+            }
+            e.chart.render();
+        }
+
+        }
+        data1.value = "122,33\n200,44\n500,100\n600,200"
+        data2.value = "100,23\n250,24\n600,80\n700,220"
+        btn.addEventListener('click', function() {
+            chart.options.data[0].dataPoints = []
+            chart.options.data[1].dataPoints = []
+            let value1 = data1.value.split("\n");
+            let value2 = data2.value.split("\n");
+            value1.forEach(value => {
+                let values = value.split(",");
+                chart.options.data[0].dataPoints.push({
+                    x: parseFloat(values[0]), y: parseFloat(values[1]), markerSize: 15 
+                })
+            })
+            value2.forEach(value => {
+                let values = value.split(",");
+                chart.options.data[1].dataPoints.push({
+                    x: parseFloat(values[0]), y: parseFloat(values[1]), markerSize: 15 
+                })
+            })
+            chart.render();
+        })
+    </script>
+</body>
+</html>
